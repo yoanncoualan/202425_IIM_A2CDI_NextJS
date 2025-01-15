@@ -1,10 +1,18 @@
-"use server";
+"use client";
 
 import { CreateSkill } from "@/actions/CreateSkill";
+import { useFormState } from "react-dom";
+import { SkillError } from "@/types/SkillError";
 
-export default async function SkillForm() {
+export default function SkillForm() {
+  const initialState: SkillError = { message: null, errors: {} };
+  const [state, formAction] = useFormState<SkillError, FormData>(
+    CreateSkill,
+    initialState
+  );
+
   return (
-    <form action={CreateSkill}>
+    <form action={formAction}>
       <label htmlFor="skill_name">Compétence : </label>
       <input
         type="text"
@@ -12,6 +20,12 @@ export default async function SkillForm() {
         id="skill_name"
         placeholder="NextJS"
       />
+      {state.errors?.skill_name &&
+        state.errors.skill_name.map((error: string) => (
+          <p style={{ color: "red" }} key={error}>
+            {error}
+          </p>
+        ))}
       <br />
       <label htmlFor="skill_level">Niveau : </label>
       <br />
@@ -23,7 +37,18 @@ export default async function SkillForm() {
         max="5"
         step="1"
       />
+      {state.errors?.skill_level &&
+        state.errors.skill_level.map((error: string) => (
+          <p style={{ color: "red" }} key={error}>
+            {error}
+          </p>
+        ))}
       <br />
+      {!state.errors && state.message && (
+        <p style={{ color: "red" }} key={state.message}>
+          {state.message}
+        </p>
+      )}
       <input type="submit" name="skill_add" value="Ajouter" />
     </form>
   );

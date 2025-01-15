@@ -1,4 +1,5 @@
 import Header from "@/components/Header";
+import { Suspense } from "react";
 
 export default function CompteLayout({
   children,
@@ -7,7 +8,9 @@ export default function CompteLayout({
 }>) {
   return (
     <main>
-      <Header />
+      <Suspense>
+        <Header />
+      </Suspense>
       {children}
     </main>
   );

@@ -1,5 +1,5 @@
 export type Skill = {
-  rowid?: number;
+  rowid: string;
   skill_name: string;
   level: number;
   user: number;

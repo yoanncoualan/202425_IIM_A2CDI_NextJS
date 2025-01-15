@@ -1,10 +1,9 @@
-import Image from "next/image";
 import styles from "./page.module.css";
 import test from "./test.module.css";
 import clsx from "clsx";
 
 export default function Home() {
-  const status = "lkdjf";
+  const status: string = "lkdjf";
 
   return (
     <main

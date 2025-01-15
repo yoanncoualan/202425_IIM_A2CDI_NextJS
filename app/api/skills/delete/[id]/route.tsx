@@ -6,10 +6,16 @@ import sqlite3 from "sqlite3";
 
 export async function DELETE(
   req: NextRequest,
-  { params }: { params: { id: string } }
+  {
+    params,
+  }: {
+    params: Promise<{ id: string }>;
+  }
 ) {
+  const id = (await params).id;
+
   // Call deleteSkill function (see below)
-  const response = await deleteSkill(params.id);
+  const response = await deleteSkill(id);
 
   return NextResponse.json({ response });
 }

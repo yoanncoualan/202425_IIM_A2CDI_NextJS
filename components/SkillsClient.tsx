@@ -14,7 +14,7 @@ export default function SkillsClient() {
   };
 
   // Execute deletion
-  const deleteSkill = async (skill_id: number | undefined) => {
+  const deleteSkill = async (skill_id: string) => {
     // Call API with DELETE method
     const response = await fetch(`/api/skills/delete/${skill_id}`, {
       method: "DELETE",
