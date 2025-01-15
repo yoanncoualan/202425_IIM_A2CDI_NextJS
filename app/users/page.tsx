@@ -1,14 +1,14 @@
-import users from "@/lib/data";
+import Users from "@/components/Users"; // Import the Users components created before
+import UsersLoader from "@/components/UsersLoader"; // Import the loader
+import { Suspense } from "react"; // Import the component that show a loader before data are ready
 
-export default function Users() {
-  const users_list = users.map((user, i) => {
-    // Parcours des données
-    return (
-      <p key={i}>
-        {user.firstname} {user.lastname} : {user.email}
-      </p>
-    );
-  });
-
-  return <>{users_list}</>; // Affichage des paragraphes
+export default function UsersList() {
+  return (
+    <>
+      <h1>Liste des utilisateurs :</h1>
+      <Suspense fallback={<UsersLoader />}>
+        <Users />
+      </Suspense>
+    </>
+  );
 }
