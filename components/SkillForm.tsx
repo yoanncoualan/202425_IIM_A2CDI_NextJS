@@ -1,12 +1,12 @@
 "use client";
 
 import { CreateSkill } from "@/actions/CreateSkill";
-import { useFormState } from "react-dom";
+import { useActionState } from "react";
 import { SkillError } from "@/types/SkillError";
 
 export default function SkillForm() {
   const initialState: SkillError = { message: null, errors: {} };
-  const [state, formAction] = useFormState<SkillError, FormData>(
+  const [state, formAction] = useActionState<SkillError, FormData>(
     CreateSkill,
     initialState
   );

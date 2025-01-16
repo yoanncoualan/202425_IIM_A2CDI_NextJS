@@ -34,3 +34,104 @@ You can check out [the Next.js GitHub repository](https://github.com/vercel/next
 The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
 
 Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+
+## Brevo
+
+### Etape 1
+
+Créer un template de mail dans Brevo.
+
+Pour ajouter des variables, il faut écrire `{{params.nom_variable}}`, par exemple `{{params.email}}` pour l'email.
+
+### Etape 2
+
+Créer une route `/api/brevo` par exemple :
+
+```tsx filename="app/api/brevo/route.tsx"
+"use server";
+
+import { NextRequest, NextResponse } from "next/server";
+import {
+  TransactionalEmailsApi,
+  TransactionalEmailsApiApiKeys,
+} from "@getbrevo/brevo";
+
+export async function POST(request: NextRequest) {
+  // Get body request
+  const { email, message } = await request.json();
+
+  //  Vérification du formulaire
+
+  // Appel de l'API Brevo
+  const BREVO_API_KEY = process.env.BREVO_API_KEY;
+
+  if (!BREVO_API_KEY) {
+    return NextResponse.json(
+      {
+        message: "Brevo API key manquant",
+      },
+      { status: 400 }
+    );
+  }
+
+  const apiInstance = new TransactionalEmailsApi();
+
+  // Configure API key authorization: api-key
+
+  apiInstance.setApiKey(TransactionalEmailsApiApiKeys.apiKey, BREVO_API_KEY);
+
+  const sendSmtpEmail = {
+    to: [
+      {
+        email: "votre@email.com",
+        name: "Votre nom",
+      },
+    ],
+    templateId: 1, // Adapter l'id du template
+    params: {
+      email: email, // Remplacemenet de la variable 'params.email'
+      message: message.replace(/\r\n|\r|\n/g, "<br />"), // Remplacemenet de la variable 'params.message'
+    },
+    replyTo: { email: email },
+    subject: "Prise de contact depuis le portfolio",
+    tags: ["portfolio"],
+  };
+
+  try {
+    const response = await apiInstance.sendTransacEmail(sendSmtpEmail);
+    return NextResponse.json(response);
+  } catch (error) {
+    console.log("Error sending email:", error);
+
+    return NextResponse.json(
+      {
+        message: "Une erreur s'est produite, voilà mon email : votre@email.com",
+      },
+      { status: 400 }
+    );
+  }
+}
+```
+
+### Etape 3
+
+Appeler cette route côté front :
+
+```tsx filename="app/page.tsx"
+// ...
+fetch("/api/brevo", {
+  method: "POST",
+  body: JSON.stringify(form),
+})
+  .then((sent) => {
+    if (sent.status < 300) {
+      // Formulaire envoyé avec succès
+    } else {
+      // Afficher le message d'erreur
+    }
+  })
+  .catch((error) => {
+    // Afficher le message d'erreur
+  });
+// ...
+```
