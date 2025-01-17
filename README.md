@@ -37,13 +37,23 @@ Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/bui
 
 ## Brevo
 
+[Documentation du SDK TypeScript Brevo](https://github.com/getbrevo/brevo-node?tab=readme-ov-file#brevo-typescript)
+
 ### Etape 1
+
+Installer le package `@getbrevo/brevo` :
+
+```bash
+npm i @getbrevo/brevo --save
+```
+
+### Etape 2
 
 Créer un template de mail dans Brevo.
 
 Pour ajouter des variables, il faut écrire `{{params.nom_variable}}`, par exemple `{{params.email}}` pour l'email.
 
-### Etape 2
+### Etape 3
 
 Créer une route `/api/brevo` par exemple :
 
@@ -113,7 +123,7 @@ export async function POST(request: NextRequest) {
 }
 ```
 
-### Etape 3
+### Etape 4
 
 Appeler cette route côté front :
 
